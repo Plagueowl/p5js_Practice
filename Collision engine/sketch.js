@@ -2,17 +2,25 @@ let ball1,ball2;
 function setup() {
   createCanvas(600,600);
   ball1 = new particle(500,110,3,2,70,10);
-  ball2 = new particle(50,70,3,3,20,10);
+  ball2 = new particle(50,70,3,5,50,10);
   
 }
 
 function draw() {
   background(0);
-  
   ball1.show();
   ball2.show();
-  ball2.collide(ball1);
+
   ball1.collide(ball2);
+
+  ball1.update();
+  ball2.update();
+
+
+
+  ball1.edges();
+  ball2.edges();
+
 }
 
 
@@ -30,12 +38,15 @@ class particle{
   
   show(){
     circle(this.position.x,this.position.y,this.radius);
+  }
+  update(){
     this.position.add(this.velocity);
   }
 
 
   //collision engine, covers edges and particle itself
-  collide(other){
+
+  edges(){
     //check edges
     if (this.position.x > height - this.radius) {
       this.position.x = height - this.radius;
@@ -53,9 +64,10 @@ class particle{
       this.position.y = this.radius;
       this.velocity.y *= -1;
     }
+  }
+  collide(other){
 
-
-    let impactVector = p5.Vector.sub(this.position,other.position);
+    let impactVector = p5.Vector.sub(other.position,this.position);
     let distance = impactVector.mag();
     if(distance< this.radius + other.radius){
 
@@ -75,7 +87,6 @@ class particle{
       let denominator = (this.mass + other.mass) *distance*distance;
       let copy = impactVector.copy();
       this.velocity.add(p5.Vector.mult(copy,(numerator/denominator)));
-      // print("here");
       copy = impactVector.copy();
 
       numerator = -2*this.mass * p5.Vector.dot(velocitySub,impactVector);
