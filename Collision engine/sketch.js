@@ -1,25 +1,48 @@
-let ball1,ball2;
+// let ball1,ball2;
+
+let arrayP;
+let n;
 function setup() {
   createCanvas(600,600);
-  ball1 = new particle(500,110,3,2,70,10);
-  ball2 = new particle(50,70,3,5,50,10);
-  
+  // ball1 = new particle(500,110,3,2,70,10);
+  // ball2 = new particle(50,70,3,5,50,10);
+  n = 15;
+  arrayP = new Array(n);
+  for(var i = 0;i<n;i++){
+    arrayP[i] = new particle(random(width),random(height),random(1),random(1),random(20,50),10,random(255));
+  }
+
 }
 
 function draw() {
   background(0);
-  ball1.show();
-  ball2.show();
 
-  ball1.collide(ball2);
+  for(var i = 0;i<n-1;i++){
+    for(var j = i+1;j<n;j++){
+      arrayP[i].show();
+      // arrayP[j].show();
+      arrayP[i].collide(arrayP[j]);
+      arrayP[i].update();
+      arrayP[j].update();
+      arrayP[i].edges();
+      // arrayP[j].edges();
+    }
 
-  ball1.update();
-  ball2.update();
+  }
+
+
+  // ball1.show();
+  // ball2.show();
+
+  // ball1.collide(ball2);
+
+  // ball1.update();
+  // ball2.update();
 
 
 
-  ball1.edges();
-  ball2.edges();
+  // ball1.edges();
+  // ball2.edges();
 
 }
 
@@ -28,16 +51,18 @@ function draw() {
 class particle{
   
   //initiates position and velocity vector
-  constructor(x,y , velocityX, velocityY, r,mass){
+  constructor(x,y , velocityX, velocityY, r,mass,colour){
     this.position = createVector(x,y);
     this.radius = r;
     this.velocity = createVector(velocityX,velocityY);
     this.mass = mass;
+    this.colour = colour;
   }
   //draws a circle for this example
   
   show(){
-    circle(this.position.x,this.position.y,this.radius);
+    fill(this.colour,90,120);
+    circle(this.position.x,this.position.y,this.radius*2);
   }
   update(){
     this.position.add(this.velocity);
