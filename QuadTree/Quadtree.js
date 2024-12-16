@@ -99,7 +99,7 @@ class QuadTree{
       if(range.contains(p)){
         found.push(p);
       }
-      // count++; //Uncomment this line for seeing how many comparisions it did to find the number of points in the square.
+      count++; //Uncomment this line for seeing how many comparisions it did to find the number of points in the square.
     }
     if(this.divided){
       this.northWest.detectPoints(range,found);
