@@ -1,15 +1,18 @@
+//This is the final code for this file. You can check the n^2 complexity by changing the variable 'n' in the setup function. In my system, The lag starts when I put n = 100. Adjust the size of the canva, the radii, etc accordingly.
+//A new folder for optimized approach using quadtree will be created as I want to preserve this file to see the limitations and the difference in performance.
+
 // let ball1,ball2;
 
 let arrayP;
 let n;
 function setup() {
-  createCanvas(600,600);
+  createCanvas(650,650);
   // ball1 = new particle(500,110,3,2,70,10);
   // ball2 = new particle(50,70,3,5,50,10);
-  n = 15;
+  n = 10;
   arrayP = new Array(n);
   for(var i = 0;i<n;i++){
-    arrayP[i] = new particle(random(width),random(height),random(1),random(1),random(20,50),10,random(255));
+    arrayP[i] = new particle(random(width),random(height),random(0.5),random(0.1),random(5,30),10,random(255));
   }
 
 }
