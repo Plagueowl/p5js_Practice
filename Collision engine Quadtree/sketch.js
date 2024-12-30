@@ -1,6 +1,7 @@
 
-let n;
+//This code renders smoothly even with 200 particles. You can uncomment the lines mentioned of this code to look at the quadtree and individual range of each particle
 
+let n;
 //array to store all particles.
 let particles;
 
