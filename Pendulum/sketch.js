@@ -7,8 +7,9 @@ function setup() {
   createCanvas(600, 600);
   n = 15;
   pendulums = new Array();
+  let lengths = [230,211,196,183,170,159,149,140,131,124,117,110,105,99,94,89];
   for (var i = 0;i< n;i++){
-    pendulums.push(new pendulum(300,150,300 - i*15,10,PI/2));
+    pendulums.push(new pendulum(300,150,lengths[i],20,PI/4));
   }
 }
 
@@ -25,7 +26,7 @@ function draw() {
 }
 
 class pendulum{
-  constructor(x,y,l,radius,theta,gravity = 0.1, mass = 1){
+  constructor(x,y,l,radius,theta,gravity = 2, mass = 1){
     this.position = createVector(x,y);
     this.l = l;
     this.radius = radius;
