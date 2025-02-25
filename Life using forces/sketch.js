@@ -1,114 +1,74 @@
 let n;
-let arrayRed;
-let arrayBlue;
+let redParticles;
+let blueParticles;
+let greenParticles;
+let whiteParticles;
 let qtree;
-let checkedPairs = new Set();
+
+
 function setup() {
-  createCanvas(800,800);
+  createCanvas(500,500);
   // frameRate(10);
-  n = 400;
-  arrayRed = new Array();
-  arrayBlue = new Array();
-  for(var i = 0;i< n;i++){
-    arrayRed.push(new particle(random(height),random(width),5,1,i));
-  }
-  for(var i = 0;i< 1500;i++){
-    arrayBlue.push(new particle(random(height),random(width),5,3,i));
-    
-  }
+  
+  //initiating the particles
+  n = 500;
+  redParticles = new particleSystem(n,1);
+  // blueParticles = new particleSystem(n,3);
+  greenParticles = new particleSystem(n,2);
+  // whiteParticles = new particleSystem(n,0)
 }
 
 function draw() {
   background(0);
-  checkedPairs.clear();
-
+  //constructing the quadtree 
   let boundary = new Rectangle(width/2,height/2,width,height);
   let qtree = new QuadTree(boundary,4);
   for(var i = 0;i<n;i++){
-    qtree.insert(new Point(arrayRed[i].position.x,arrayRed[i].position.y,arrayRed[i]));
-    qtree.insert(new Point(arrayBlue[i].position.x,arrayBlue[i].position.y,arrayBlue[i]));
+    let redP = redParticles.particles[i];
+    // let blueP = blueParticles.particles[i];
+    let greenP = greenParticles.particles[i];
+    // let whiteP = whiteParticles.particles[i];
+    qtree.insert(new Point(redP.position.x, redP.position.y, redP));
+    // qtree.insert(new Point(blueP.position.x, blueP.position.y, blueP));
+    qtree.insert(new Point(greenP.position.x, greenP.position.y, greenP));
+    // qtree.insert(new Point(whiteP.position.x, whiteP.position.y, whiteP));
   }
   
-  for(let particle of arrayRed){
-    let range = new Circle(particle.position.x, particle.position.y, 50);
-    
-    let neighbours = qtree.detectPoints(range);
-    
-    for(let neighbour of neighbours){
-      if(neighbour.data.colour != particle.colour){
-        repel(neighbour.data, particle,5);
-      }
-      else{
-        attract(neighbour.data, particle,1);
-      }
-      
-//       let currentNearbyParticle = neighbour.data;
-      
-      // //Making a simple encrypted string of pairs of particles and checking if they have been examined before. Here is where the ID assigned to the particle comes in use
-      // if(currentNearbyParticle !== particle){
-      //   let idA = currentNearbyParticle.id;
-      //   let idB = particle.id;
-      //   let hashString = idA<idB ? `${idA}:${idB}` : `${idB}:${idA}`;
-      //   if(!checkedPairs.has(hashString)){
-      //     particle.collide(currentNearbyParticle);
-      //     checkedPairs.add(hashString);
-      //   }
-      // }
-    
-    }
-  }
+  //attract(colour, intensity, quadtree)
+  //repel(colour, intensity, quadtree)
   
-  for(let particle of arrayBlue){
-    let range = new Circle(particle.position.x, particle.position.y, 50);
-    
-    let neighbours = qtree.detectPoints(range);
-    for(let neighbour of neighbours){
-      if(neighbour.data.colour != particle.colour){
-        repel(neighbour.data, particle,5);
-      }
-      // else{
-        // repel(neighbour.data, particle,1);
-      // }
-    }
-  }
-  show();
-  // qtree.show();
+  //write the rules, update, then show.
+  //attract() and repel() Rules will just apply forces on particle's neighbors. update() will update all the velocity, position and acceleration components of particles. It will also trigger the collision engine.
   
-
   
-}
-
-
-function attract(point1,point2, intensity){
-  let distance = p5.Vector.sub(point1.position,point2.position);
+  redParticles.attract(1,7,qtree);
+  redParticles.attract(2,6,qtree);
+  // redParticles.repel(0,5,qtree);
+  // redParticles.repel(3,3,qtree);
   
-  if(distance.mag() > 0 && distance.mag() < 80){
-    let force = distance.copy().setMag(intensity/distance.mag());
-    point1.applyForce(force.mult(-0.5));
-    point2.applyForce(force.mult(0.5));
-  }
-}
-
-function repel(point1,point2, intensity){
-  let distance = p5.Vector.sub(point1.position,point2.position);
-    
-  if(distance.mag() > 0 && distance.mag() < 80){
-
-    let force = distance.copy().setMag(intensity/distance.mag());
-    point1.applyForce(force.mult(0.5));
-    point2.applyForce(force.mult(-0.5));
-  }
-}
-function show(){
-  for(let particle of arrayRed){
-    particle.update();
-    particle.show();
-    particle.edges();
-    // print(particle.acceleration.x);
-  }
-  for(let particle of arrayBlue){
-    particle.update();
-    particle.show();
-    particle.edges();
-  }
+  // greenParticles.repel(1,6,qtree);
+  // greenParticles.repel(2,1,qtree);
+  // greenParticles.repel(0,7,qtree);
+  // greenParticles.attract(3,8,qtree);
+  
+  // whiteParticles.repel(0,10,qtree);
+  // whiteParticles.attract(1,7,qtree);
+  // whiteParticles.repel(2,9,qtree);
+  // whiteParticles.repel(3,5,qtree);
+  
+  // blueParticles.repel(3,5,qtree);
+  // blueParticles.attract(0,2,qtree);
+  // blueParticles.repel(1,6,qtree);
+  // blueParticles.attract(2,2,qtree);
+  
+  redParticles.update(qtree);
+  // blueParticles.update(qtree);
+  greenParticles.update(qtree);
+  // whiteParticles.update(qtree);
+  
+  redParticles.show();
+  // blueParticles.show();
+  greenParticles.show();
+  // whiteParticles.show();
+  // qtree.show(); 
 }
